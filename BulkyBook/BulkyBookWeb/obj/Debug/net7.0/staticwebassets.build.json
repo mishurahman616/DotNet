@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "MOB/Lm83QbAiusof0BNdiVzwIvHk1pSOL7Id1FN3TQI=",
+  "Hash": "WrFIHZdv/Cn4g1kA5x6cHrJwDHCjoV8aKcXJ8JWSvno=",
   "Source": "BulkyBookWeb",
   "BasePath": "_content/BulkyBookWeb",
   "Mode": "Default",
@@ -49,6 +49,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "F:\\DotNet\\BulkyBook\\BulkyBookWeb\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\BulkyBookWeb.bundle.scp.css"
+    },
+    {
+      "Identity": "F:\\DotNet\\BulkyBook\\BulkyBookWeb\\wwwroot\\css\\boostwatch\\boostwatchSolar.css",
+      "SourceId": "BulkyBookWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\DotNet\\BulkyBook\\BulkyBookWeb\\wwwroot\\",
+      "BasePath": "_content/BulkyBookWeb",
+      "RelativePath": "css/boostwatch/boostwatchSolar.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\boostwatch\\boostwatchSolar.css"
     },
     {
       "Identity": "F:\\DotNet\\BulkyBook\\BulkyBookWeb\\wwwroot\\css\\site.css",

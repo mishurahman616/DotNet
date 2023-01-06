@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\BulkyBookWeb.bundle.scp.css"
     },
     {
+      "Id": "F:\\DotNet\\BulkyBook\\BulkyBookWeb\\wwwroot\\css\\boostwatch\\boostwatchSolar.css",
+      "PackagePath": "staticwebassets\\css\\boostwatch\\boostwatchSolar.css"
+    },
+    {
       "Id": "F:\\DotNet\\BulkyBook\\BulkyBookWeb\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
