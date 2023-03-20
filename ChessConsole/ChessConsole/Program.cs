@@ -29,7 +29,7 @@ while(true)
     Console.ForegroundColor = color;
     Console.WriteLine($"{color}'s Turn. Select piece like(x, y):");
     var x = Console.ReadLine().Trim().Split().ToList().Select(x => Convert.ToInt32(x) - 1).ToList();
-    if (board.IsValidCell(x[0], x[1]))
+    if (x.Count == 2 && board.IsValidCell(x[0], x[1]))
     {
         if (board.Grid[x[0], x[1]].IsCurrentlyOcupied)
         {
@@ -37,9 +37,13 @@ while(true)
             board.Print();
             Console.WriteLine("Select Desitination (x, y): ");
             var y = Console.ReadLine().Trim().Split().ToList().Select(x => Convert.ToInt32(x) - 1).ToList();
-            if (board.Move(x[0], x[1], y[0], y[1], color))
+            if (y.Count==2 && board.Move(x[0], x[1], y[0], y[1], color))
             {
                 turn++;
+            }
+            else
+            {
+                Console.WriteLine("Invalid Move");
             }
 
             board.ClearNextLegalMoves();

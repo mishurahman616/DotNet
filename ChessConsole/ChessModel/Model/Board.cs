@@ -43,12 +43,12 @@ namespace ChessModel.Model
         {
             var pieceset1 = Player1.PieceSet;
             var pieceset2 = Player2.PieceSet;
-            for(int i=0; i<16; i++)
+            for (int i = 0; i < 16; i++)
             {
                 int x = pieceset1[i].CurrentPosition.x;
                 int y = pieceset1[i].CurrentPosition.y;
                 //Invalid postition.
-                if(x <0 || x>7 || y<0 || y > 7)
+                if (x < 0 || x > 7 || y < 0 || y > 7)
                 {
                     continue;
                 }
@@ -56,7 +56,7 @@ namespace ChessModel.Model
                 Grid[x, y].CurrentPiece = pieceset1[i];
             }
 
-            for(int i=0; i<16; i++)
+            for (int i = 0; i < 16; i++)
             {
                 int x = pieceset2[i].CurrentPosition.x;
                 int y = pieceset2[i].CurrentPosition.y;
@@ -70,7 +70,7 @@ namespace ChessModel.Model
             }
 
         }
-        
+
 
         public void Print()
         {
@@ -80,7 +80,7 @@ namespace ChessModel.Model
             for (int i = 0; i < Size; i++)
             {
                 Console.ForegroundColor = ConsoleColor.Blue;
-                Console.Write(i+1);
+                Console.Write(i + 1);
                 for (int j = 0; j < Size; j++)
                 {
 
@@ -108,21 +108,21 @@ namespace ChessModel.Model
                 }
                 Console.WriteLine();
             }
-            
+
         }
 
         public bool IsValidCell(int x, int y)
         {
-            if((x>=0 && x<8) && (y>=0 && y<8)) return true;
+            if ((x >= 0 && x < 8) && (y >= 0 && y < 8)) return true;
             return false;
         }
         public bool Move(int x, int y, int destX, int destY, ConsoleColor color)
         {
-            if(IsValidCell(x, y) && IsValidCell(destX, destY))
+            if (IsValidCell(x, y) && IsValidCell(destX, destY))
             {
                 if (Grid[x, y].IsCurrentlyOcupied)
                 {
-                    if (Grid[x,y].CurrentPiece.ForegroundColor== color)
+                    if (Grid[x, y].CurrentPiece.ForegroundColor == color)
                     {
                         Cell currentCell = Grid[x, y];
                         Piece piece = currentCell.CurrentPiece;
@@ -130,7 +130,11 @@ namespace ChessModel.Model
                         MarkNextLegalMoves(currentCell, piece);
                         if (Grid[destX, destY].NextLegalMove == true)
                         {
-                            
+                            if (Grid[destX, destY].IsCurrentlyOcupied && Grid[destX, destY].CurrentPiece.PieceName == "King")
+                            {
+                                Console.WriteLine("Cannot hit King");
+                                return false;
+                            }
                             piece.CurrentPosition = (destX, destY);
                             Grid[destX, destY].IsCurrentlyOcupied = true;
                             Grid[destX, destY].CurrentPiece = piece;
@@ -172,51 +176,51 @@ namespace ChessModel.Model
                 }
             }
         }
-        public void MarkNextLegalMoves(Cell currentCell,  Piece piece)
+        public void MarkNextLegalMoves(Cell currentCell, Piece piece)
         {
 
             switch (piece.PieceName)
             {
                 case "King":
-                    if(IsValidCell(currentCell.RowNumber + 1, currentCell.ColumnNumber))
+                    if (IsValidCell(currentCell.RowNumber + 1, currentCell.ColumnNumber))
                     {
-                        if(piece.ForegroundColor != Grid[currentCell.RowNumber + 1, currentCell.ColumnNumber].CurrentPiece?.ForegroundColor)
+                        if (piece.ForegroundColor != Grid[currentCell.RowNumber + 1, currentCell.ColumnNumber].CurrentPiece?.ForegroundColor)
                             Grid[currentCell.RowNumber + 1, currentCell.ColumnNumber].NextLegalMove = true;
                     }
                     if (IsValidCell(currentCell.RowNumber - 1, currentCell.ColumnNumber))
                     {
-                        if(piece.ForegroundColor != Grid[currentCell.RowNumber - 1, currentCell.ColumnNumber].CurrentPiece?.ForegroundColor)
+                        if (piece.ForegroundColor != Grid[currentCell.RowNumber - 1, currentCell.ColumnNumber].CurrentPiece?.ForegroundColor)
                             Grid[currentCell.RowNumber - 1, currentCell.ColumnNumber].NextLegalMove = true;
                     }
                     if (IsValidCell(currentCell.RowNumber, currentCell.ColumnNumber + 1))
                     {
-                        if(piece.ForegroundColor != Grid[currentCell.RowNumber, currentCell.ColumnNumber+1].CurrentPiece?.ForegroundColor)
+                        if (piece.ForegroundColor != Grid[currentCell.RowNumber, currentCell.ColumnNumber + 1].CurrentPiece?.ForegroundColor)
                             Grid[currentCell.RowNumber, currentCell.ColumnNumber + 1].NextLegalMove = true;
                     }
                     if (IsValidCell(currentCell.RowNumber, currentCell.ColumnNumber - 1))
                     {
-                        if(piece.ForegroundColor != Grid[currentCell.RowNumber, currentCell.ColumnNumber-1].CurrentPiece?.ForegroundColor)
+                        if (piece.ForegroundColor != Grid[currentCell.RowNumber, currentCell.ColumnNumber - 1].CurrentPiece?.ForegroundColor)
                             Grid[currentCell.RowNumber, currentCell.ColumnNumber - 1].NextLegalMove = true;
                     }
                     if (IsValidCell(currentCell.RowNumber + 1, currentCell.ColumnNumber + 1))
                     {
-                        if(piece.ForegroundColor != Grid[currentCell.RowNumber + 1, currentCell.ColumnNumber+1].CurrentPiece?.ForegroundColor)
+                        if (piece.ForegroundColor != Grid[currentCell.RowNumber + 1, currentCell.ColumnNumber + 1].CurrentPiece?.ForegroundColor)
                             Grid[currentCell.RowNumber + 1, currentCell.ColumnNumber + 1].NextLegalMove = true;
                     }
                     if (IsValidCell(currentCell.RowNumber + 1, currentCell.ColumnNumber - 1))
                     {
-                        if(piece.ForegroundColor != Grid[currentCell.RowNumber+1, currentCell.ColumnNumber-1].CurrentPiece?.ForegroundColor)
+                        if (piece.ForegroundColor != Grid[currentCell.RowNumber + 1, currentCell.ColumnNumber - 1].CurrentPiece?.ForegroundColor)
                             Grid[currentCell.RowNumber + 1, currentCell.ColumnNumber - 1].NextLegalMove = true;
                     }
 
                     if (IsValidCell(currentCell.RowNumber - 1, currentCell.ColumnNumber + 1))
                     {
-                        if(piece.ForegroundColor != Grid[currentCell.RowNumber-1, currentCell.ColumnNumber + 1].CurrentPiece?.ForegroundColor)
+                        if (piece.ForegroundColor != Grid[currentCell.RowNumber - 1, currentCell.ColumnNumber + 1].CurrentPiece?.ForegroundColor)
                             Grid[currentCell.RowNumber - 1, currentCell.ColumnNumber + 1].NextLegalMove = true;
                     }
                     if (IsValidCell(currentCell.RowNumber - 1, currentCell.ColumnNumber - 1))
                     {
-                        if(piece.ForegroundColor != Grid[currentCell.RowNumber-1, currentCell.ColumnNumber-1].CurrentPiece?.ForegroundColor)
+                        if (piece.ForegroundColor != Grid[currentCell.RowNumber - 1, currentCell.ColumnNumber - 1].CurrentPiece?.ForegroundColor)
                             Grid[currentCell.RowNumber - 1, currentCell.ColumnNumber - 1].NextLegalMove = true;
                     }
 
@@ -225,7 +229,7 @@ namespace ChessModel.Model
 
                 case "Queen":
                     //check all row in same column above the current cell
-                     for(int i=piece.CurrentPosition.x-1; i>=0; i--)
+                    for (int i = piece.CurrentPosition.x - 1; i >= 0; i--)
                     {
                         if (Grid[i, currentCell.ColumnNumber].IsCurrentlyOcupied)
                         {
@@ -248,7 +252,7 @@ namespace ChessModel.Model
                     }
 
                     //check all row in same column below the current cell
-                    for (int i = piece.CurrentPosition.x + 1;  i<8; i++)
+                    for (int i = piece.CurrentPosition.x + 1; i < 8; i++)
                     {
                         if (Grid[i, currentCell.ColumnNumber].IsCurrentlyOcupied)
                         {
@@ -497,11 +501,11 @@ namespace ChessModel.Model
                     break;
                 case "Bishop":
                     //upper left corner
-                    for(int row = piece.CurrentPosition.x-1, col=piece.CurrentPosition.y-1; row >= 0 && col>=0; row--, col--)
+                    for (int row = piece.CurrentPosition.x - 1, col = piece.CurrentPosition.y - 1; row >= 0 && col >= 0; row--, col--)
                     {
                         if (Grid[row, col].IsCurrentlyOcupied)
                         {
-                           if( Grid[row, col].CurrentPiece.ForegroundColor != piece.ForegroundColor)
+                            if (Grid[row, col].CurrentPiece.ForegroundColor != piece.ForegroundColor)
                             {
                                 Grid[row, col].NextLegalMove = true;
                                 break;
@@ -510,13 +514,14 @@ namespace ChessModel.Model
                             {
                                 break;
                             }
-                        }else
+                        }
+                        else
                         {
                             Grid[row, col].NextLegalMove = true;
                         }
                     }
                     //upper right conrner
-                    for(int row = piece.CurrentPosition.x-1, col=piece.CurrentPosition.y+1; row >= 0 && col<8; row--, col++)
+                    for (int row = piece.CurrentPosition.x - 1, col = piece.CurrentPosition.y + 1; row >= 0 && col < 8; row--, col++)
                     {
                         if (Grid[row, col].IsCurrentlyOcupied)
                         {
@@ -536,7 +541,7 @@ namespace ChessModel.Model
                         }
                     }
                     // lower left corner
-                    for(int row = piece.CurrentPosition.x+1, col = piece.CurrentPosition.y-1; row < 8 && col>=0; row++, col--)
+                    for (int row = piece.CurrentPosition.x + 1, col = piece.CurrentPosition.y - 1; row < 8 && col >= 0; row++, col--)
                     {
                         if (Grid[row, col].IsCurrentlyOcupied)
                         {
@@ -557,7 +562,7 @@ namespace ChessModel.Model
                     }
 
                     // lower right corner
-                    for(int row = piece.CurrentPosition.x+1, col = piece.CurrentPosition.y+1; row < 8 && col<8; row++, col++)
+                    for (int row = piece.CurrentPosition.x + 1, col = piece.CurrentPosition.y + 1; row < 8 && col < 8; row++, col++)
                     {
                         if (Grid[row, col].IsCurrentlyOcupied)
                         {
@@ -582,13 +587,13 @@ namespace ChessModel.Model
                     // x, y are the coordinates of next position 
                     int x = piece.CurrentPosition.x + 1;
                     int y = piece.CurrentPosition.y + 2;
-                    if(IsValidCell(x, y))
+                    if (IsValidCell(x, y))
                     {
                         if (Grid[x, y].IsCurrentlyOcupied)
                         {
-                            if (Grid[x,y].CurrentPiece.ForegroundColor != piece.ForegroundColor)
+                            if (Grid[x, y].CurrentPiece.ForegroundColor != piece.ForegroundColor)
                             {
-                                Grid[x,y].NextLegalMove= true;
+                                Grid[x, y].NextLegalMove = true;
                             }
                         }
                         else
@@ -596,9 +601,9 @@ namespace ChessModel.Model
                             Grid[x, y].NextLegalMove = true;
                         }
                     }
-                     x = piece.CurrentPosition.x + 1;
-                     y = piece.CurrentPosition.y - 2;
-                    if(IsValidCell(x, y))
+                    x = piece.CurrentPosition.x + 1;
+                    y = piece.CurrentPosition.y - 2;
+                    if (IsValidCell(x, y))
                     {
                         if (Grid[x, y].IsCurrentlyOcupied)
                         {
@@ -644,8 +649,8 @@ namespace ChessModel.Model
                             Grid[x, y].NextLegalMove = true;
                         }
                     }
-                     x = piece.CurrentPosition.x + 2;
-                     y = piece.CurrentPosition.y + 1;
+                    x = piece.CurrentPosition.x + 2;
+                    y = piece.CurrentPosition.y + 1;
                     if (IsValidCell(x, y))
                     {
                         if (Grid[x, y].IsCurrentlyOcupied)
@@ -710,20 +715,20 @@ namespace ChessModel.Model
                     }
                     break;
                 case "Pawn":
-                    if(piece.ForegroundColor == Player1.Color)
+                    if (piece.ForegroundColor == Player1.Color)
                     {
-               
+
                         x = piece.CurrentPosition.x + 1;
                         y = piece.CurrentPosition.y;
-                        if(IsValidCell(x, y))
+                        if (IsValidCell(x, y))
                         {
                             if (!Grid[x, y].IsCurrentlyOcupied)
                             {
-                                Grid[x,y].NextLegalMove= true;
+                                Grid[x, y].NextLegalMove = true;
                             }
                         }
                         x = piece.CurrentPosition.x + 1;
-                        y = piece.CurrentPosition.y-1;
+                        y = piece.CurrentPosition.y - 1;
                         if (IsValidCell(x, y))
                         {
                             if (Grid[x, y].IsCurrentlyOcupied)
@@ -733,7 +738,7 @@ namespace ChessModel.Model
                             }
                         }
                         x = piece.CurrentPosition.x + 1;
-                        y = piece.CurrentPosition.y+1;
+                        y = piece.CurrentPosition.y + 1;
                         if (IsValidCell(x, y))
                         {
                             if (Grid[x, y].IsCurrentlyOcupied)
@@ -786,16 +791,17 @@ namespace ChessModel.Model
             ClearNextLegalMoves();
             Piece king1 = new Piece();
             Piece king2 = new Piece();
-            for(int i=0; i<Size; i++)
+            for (int i = 0; i < Size; i++)
             {
-                for(int j=0; j<Size; j++)
+                for (int j = 0; j < Size; j++)
                 {
                     if (Grid[i, j].IsCurrentlyOcupied)
                     {
                         if (Grid[i, j].CurrentPiece.ForegroundColor == Player1.Color)
                         {
                             MarkNextLegalMoves(Grid[i, j], Grid[i, j].CurrentPiece);
-                        }else if (Grid[i, j].CurrentPiece.ForegroundColor==Player2.Color && Grid[i, j].CurrentPiece.PieceName == "King")
+                        }
+                        else if (Grid[i, j].CurrentPiece.ForegroundColor == Player2.Color && Grid[i, j].CurrentPiece.PieceName == "King")
                         {
                             king2 = Grid[i, j].CurrentPiece;
                         }
@@ -803,7 +809,7 @@ namespace ChessModel.Model
                 }
             }
 
-            
+
             if (Grid[king2.CurrentPosition.x, king2.CurrentPosition.y].NextLegalMove == true) return true;
             ClearNextLegalMoves();
             for (int i = 0; i < Size; i++)
@@ -829,4 +835,3 @@ namespace ChessModel.Model
         }
     }
 }
- 
