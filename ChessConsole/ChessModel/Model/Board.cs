@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -126,21 +127,40 @@ namespace ChessModel.Model
                     {
                         Cell currentCell = Grid[x, y];
                         Piece piece = currentCell.CurrentPiece;
-
+                        Cell destCell = Grid[destX, destY];
+                        bool destOcupied = Grid[destX, destY].IsCurrentlyOcupied;
+                        Piece destPiece = null;
+                        if (destOcupied)
+                        {
+                            destPiece = Grid[destX, destY].CurrentPiece;
+                        }
                         MarkNextLegalMoves(currentCell, piece);
                         if (Grid[destX, destY].NextLegalMove == true)
                         {
+                            
                             if (Grid[destX, destY].IsCurrentlyOcupied && Grid[destX, destY].CurrentPiece.PieceName == "King")
                             {
                                 Console.WriteLine("Cannot hit King");
                                 return false;
                             }
+                   //         bool checkMate = IsInCheckMate(color);
                             piece.CurrentPosition = (destX, destY);
                             Grid[destX, destY].IsCurrentlyOcupied = true;
                             Grid[destX, destY].CurrentPiece = piece;
                             Grid[x, y].IsCurrentlyOcupied = false;
                             Grid[x, y].CurrentPiece = null;
                             ClearNextLegalMoves();
+                            if(IsInCheckMate(color))
+                            {
+                                piece.CurrentPosition = (x, y);
+                                Grid[x, y] = currentCell;
+                                Grid[x, y].IsCurrentlyOcupied = true;
+                                Grid[x, y].CurrentPiece = piece;
+                                Grid[destX, destY] = destCell;
+                                Grid[destX, destY].IsCurrentlyOcupied = destOcupied;
+                                Grid[destX, destY].CurrentPiece = destPiece;
+                                return false;
+                            }
                             return true;
                         }
                         else
@@ -786,50 +806,60 @@ namespace ChessModel.Model
             }
         }
 
-        public bool IsInCheckMate()
+        public bool IsInCheckMate(ConsoleColor color)
         {
-            ClearNextLegalMoves();
-            Piece king1 = new Piece();
-            Piece king2 = new Piece();
-            for (int i = 0; i < Size; i++)
+            if(color == Player2.Color)
             {
-                for (int j = 0; j < Size; j++)
+                ClearNextLegalMoves();
+                Piece king2 = new Piece();
+                for (int i = 0; i < Size; i++)
                 {
-                    if (Grid[i, j].IsCurrentlyOcupied)
+                    for (int j = 0; j < Size; j++)
                     {
-                        if (Grid[i, j].CurrentPiece.ForegroundColor == Player1.Color)
+                        if (Grid[i, j].IsCurrentlyOcupied)
                         {
-                            MarkNextLegalMoves(Grid[i, j], Grid[i, j].CurrentPiece);
-                        }
-                        else if (Grid[i, j].CurrentPiece.ForegroundColor == Player2.Color && Grid[i, j].CurrentPiece.PieceName == "King")
-                        {
-                            king2 = Grid[i, j].CurrentPiece;
+                            if (Grid[i, j].CurrentPiece.ForegroundColor == Player1.Color)
+                            {
+                                MarkNextLegalMoves(Grid[i, j], Grid[i, j].CurrentPiece);
+                            }
+                            else if (Grid[i, j].CurrentPiece.ForegroundColor == Player2.Color && Grid[i, j].CurrentPiece.PieceName == "King")
+                            {
+                                king2 = Grid[i, j].CurrentPiece;
+                            }
                         }
                     }
                 }
+
+                if (Grid[king2.CurrentPosition.x, king2.CurrentPosition.y].NextLegalMove == true) return true;
             }
-
-
-            if (Grid[king2.CurrentPosition.x, king2.CurrentPosition.y].NextLegalMove == true) return true;
-            ClearNextLegalMoves();
-            for (int i = 0; i < Size; i++)
+            else
             {
-                for (int j = 0; j < Size; j++)
+                Piece king1 = new Piece();
+
+                ClearNextLegalMoves();
+                for (int i = 0; i < Size; i++)
                 {
-                    if (Grid[i, j].IsCurrentlyOcupied)
+                    for (int j = 0; j < Size; j++)
                     {
-                        if (Grid[i, j].CurrentPiece.ForegroundColor == Player2.Color)
+                        if (Grid[i, j].IsCurrentlyOcupied)
                         {
-                            MarkNextLegalMoves(Grid[i, j], Grid[i, j].CurrentPiece);
-                        }
-                        else if (Grid[i, j].CurrentPiece.ForegroundColor == Player1.Color && Grid[i, j].CurrentPiece.PieceName == "King")
-                        {
-                            king1 = Grid[i, j].CurrentPiece;
+                            if (Grid[i, j].CurrentPiece.ForegroundColor == Player2.Color)
+                            {
+                                MarkNextLegalMoves(Grid[i, j], Grid[i, j].CurrentPiece);
+                            }
+                            else if (Grid[i, j].CurrentPiece.ForegroundColor == Player1.Color && Grid[i, j].CurrentPiece.PieceName == "King")
+                            {
+                                king1 = Grid[i, j].CurrentPiece;
+                            }
                         }
                     }
                 }
+                if (Grid[king1.CurrentPosition.x, king1.CurrentPosition.y].NextLegalMove == true) return true;
             }
-            if (Grid[king1.CurrentPosition.x, king1.CurrentPosition.y].NextLegalMove == true) return true;
+            
+
+
+            
             ClearNextLegalMoves();
             return false;
         }

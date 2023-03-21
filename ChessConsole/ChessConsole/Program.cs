@@ -55,10 +55,14 @@ while(true)
     {
         Console.WriteLine("Invalid Input");
     }
-    if (board.IsInCheckMate())
+    if (board.IsInCheckMate(board.Player1.Color))
     {
         board.ClearNextLegalMoves();
-        Console.WriteLine("CheckMate");
+        Console.WriteLine($"{board.Player1.Color} is in CheckMate");
+    }else if (board.IsInCheckMate(board.Player2.Color))
+    {
+        board.ClearNextLegalMoves();
+        Console.WriteLine($"{board.Player2.Color} is in CheckMate");
     }
-       
+
 }
